@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نظام الوصول | سيسي</title>
+<style>
+:root{--green:#73ffb0;--dim:#4b9970;--red:#ff4d5d;--bg:#05090b;--panel:#0b1215;--line:#1d3b32}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0,#10251d 0%,#05090b 55%);color:#d8f8e5;font-family:Consolas,"Courier New",monospace;display:grid;place-items:center;padding:18px}
+.shell{width:min(980px,100%);border:1px solid #28513e;background:rgba(6,12,13,.97);box-shadow:0 0 60px #001e12, inset 0 0 35px #06160e;position:relative}
+.shell:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(100,255,160,.025) 4px 5px)}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 22px;border-bottom:1px solid var(--line);font-size:12px;letter-spacing:1px;color:var(--green)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);margin-left:8px}
+main{padding:clamp(20px,5vw,48px)}.eyebrow{font-size:12px;color:var(--dim);letter-spacing:3px}
+h1{font-size:clamp(28px,5vw,48px);margin:12px 0;color:#eafff1;text-shadow:0 0 22px #1a8a50}
+.desc{color:#82a995;font-size:14px;margin:0 0 28px}
+.grid{display:grid;grid-template-columns:1.4fr .8fr;gap:16px}
+.terminal,.status{border:1px solid var(--line);background:#030707;padding:18px;min-height:235px}
+.title{color:var(--green);font-size:12px;letter-spacing:2px;border-bottom:1px solid #153125;padding-bottom:12px;margin-bottom:14px}
+#logs{font-size:13px;line-height:2;color:#a9d9bd;min-height:145px;white-space:pre-wrap}
+#logs .ok{color:var(--green)}#logs .warn{color:#ffc76a}#logs .bad{color:var(--red)}
+.statusline{display:flex;justify-content:space-between;font-size:12px;margin:14px 0;color:#91b7a0}
+.meter{height:5px;background:#14251c;margin-top:7px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#28a45a,#9affbf);transition:width .5s}
+button{width:100%;margin-top:20px;padding:16px;border:1px solid #48d987;background:linear-gradient(180deg,#103a25,#07190f);color:#caffdc;font:700 15px inherit;letter-spacing:1px;cursor:pointer;box-shadow:0 0 20px #07351b;transition:.2s}
+button:hover{background:#164b2e;box-shadow:0 0 28px #0c7138}button:disabled{opacity:.55;cursor:default}
+.alert{display:none;margin-top:18px;border:1px solid #8e2630;background:linear-gradient(90deg,#1b090c,#10090b);padding:20px;text-align:center;animation:flash .8s ease-in-out 2}
+.alert h2{color:#ff5967;margin:0 0 10px;font-size:clamp(22px,4vw,34px);text-shadow:0 0 16px #b00020}
+.alert p{color:#ffc0c4;margin:6px 0}.loc{font-size:19px;color:#fff;letter-spacing:1px;margin:14px 0}
+@keyframes flash{50%{border-color:#ff4d5d;box-shadow:0 0 24px #7c111b}}
+.footer{padding:12px 22px;border-top:1px solid var(--line);font-size:11px;color:#456b55;display:flex;justify-content:space-between}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.terminal,.status{min-height:unset}}
+</style></head>
+<body>
+<div class="shell">
+<div class="bar"><span><span class="dot"></span> SECURE ACCESS TERMINAL</span><span>SESSION: S-09 // ENCRYPTED</span></div>
+<main>
+<div class="eyebrow">بوابة مراقبة رقمية</div>
+<h1>نظام الوصول السري</h1>
+<p class="desc">واجهة تحليل متقدمة • قناة اتصال مشفّرة • وضع الاستهداف</p>
+<div class="grid">
+<section class="terminal"><div class="title">سجل العمليات / SYSTEM LOG</div><div id="logs"><span class="ok">[READY]</span> النظام جاهز لاستقبال الأمر.<br>[IDLE] بانتظار بدء عملية الاختراق…</div></section>
+<section class="status"><div class="title">حالة النظام</div>
+<div class="statusline"><span>الاتصال</span><span id="conn">مستقر</span></div><div class="meter"><div class="fill" id="m1"></div></div>
+<div class="statusline"><span>تحليل الهدف</span><span id="an">0%</span></div><div class="meter"><div class="fill" id="m2"></div></div>
+<div class="statusline"><span>مستوى الحماية</span><span id="sec">مرتفع</span></div><div class="meter"><div class="fill" id="m3"></div></div>
+</section></div>
+<button id="hack">⟡ بدء الاختراق</button>
+<div class="alert" id="alert"><h2>⚠ تم تحديد موقعك</h2><p>تم رصد نقطة الاتصال بنجاح.</p><div class="loc">الموقع المحدد: القطاع 07 — المنطقة الصناعية</div><p>رمز الوصول النهائي:</p><div class="loc" style="color:#ff5967;font-size:32px;letter-spacing:8px">⟁ ⌁ ⟊ ⌖</div><p>تعذّر فك الرمز — ACCESS DENIED</p></div>
+</main><div class="footer"><span>SECURITY PROTOCOL // ACTIVE</span><span>TRACE STATUS: SIMULATED</span></div>
+</div>
+<script>
+const steps=[
+["[INIT] تشغيل وحدة الاختراق…",12],
+["[SCAN] فحص البوابة الرقمية…",28],
+["[BYPASS] تجاوز طبقة الحماية الأولى…",46],
+["[TRACE] تحليل إشارة الهدف…",65],
+["[LOCATE] تثبيت نقطة الاتصال…",82],
+["[ALERT] تم تحديد موقعك.",100]
+];
+const btn=document.getElementById('hack'),logs=document.getElementById('logs');
+btn.onclick=async()=>{btn.disabled=true;btn.textContent="⟡ جاري تنفيذ العملية…";logs.innerHTML="";
+for(let i=0;i<steps.length;i++){await new Promise(r=>setTimeout(r,900));let line=document.createElement('div');line.textContent=steps[i][0];line.className=i===steps.length-1?'bad':(i>2?'warn':'ok');logs.appendChild(line);document.getElementById('an').textContent=steps[i][1]+'%';document.getElementById('m2').style.width=steps[i][1]+'%';document.getElementById('m1').style.width=Math.min(100,steps[i][1]+5)+'%';document.getElementById('m3').style.width=(100-steps[i][1])+'%';document.getElementById('sec').textContent=i<3?'مرتفع':i<5?'يتراجع':'غير معروف';}
+document.getElementById('conn').textContent='تم رصد الاتصال';document.getElementById('alert').style.display='block';btn.textContent='اكتملت العملية';};
+</script></body></html>
